@@ -51,6 +51,7 @@ public class Report {
         configuration.setHeaderMatcher(Defaults.createDefaultMatcher());
         configuration.setApproveDefaultLicenses(true);
         Options opts = buildOptions();
+        PrintStream outf = System.out;
 
         CommandLine cl = null;
         try {
@@ -90,11 +91,14 @@ public class Report {
                     report.setInputFileFilter(filter);
                 }
             }
+            if (cl.hasOption('o')) {
+                outf = new PrintStream(new FileOutputStream( new File(cl.getOptionValue('o'))));
+            }
             if (cl.hasOption('x')) {
-                report.report(System.out, configuration);
+                report.report(outf, configuration);
             } else {
                 if (!cl.hasOption(STYLESHEET_CLI)) {
-                    report.styleReport(System.out, configuration);
+                    report.styleReport(outf, configuration);
                 } else {
                     String[] style = cl.getOptionValues(STYLESHEET_CLI);
                     if (style.length != 1) {
@@ -102,8 +106,8 @@ public class Report {
                         System.exit(1);
                     }
                     try {
-                        report(System.out,
-                                report.getDirectory(System.out),
+                        report(outf,
+                                report.getDirectory(outf),
                                 new FileInputStream(style[0]),
                                 configuration);
                     } catch (FileNotFoundException fnfe) {
@@ -147,6 +151,10 @@ public class Report {
                 "Print help for the RAT command line interface and exit");
         opts.addOption(help);
 
+        Option outFile = new Option("o", "output-file", true,
+                "File to output result to.  If not specified console output is used.");
+        opts.addOption(outFile);
+        
         OptionGroup addLicenseGroup = new OptionGroup();
         String addLicenseDesc = "Add the default license header to any file with an unknown license that is not in the exclusion list. " +
                 "By default new files will be created with the license header, " +
