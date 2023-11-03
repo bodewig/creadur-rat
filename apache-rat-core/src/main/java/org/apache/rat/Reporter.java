@@ -44,7 +44,7 @@ public class Reporter {
     /**
      * Execut the report.
      * 
-     * @param configuration The report configuration..
+     * @param configuration The report configuration.
      * @return the currently collected numerical statistics.
      * @throws Exception in case of errors.
      */

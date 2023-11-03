@@ -20,6 +20,7 @@ package org.apache.rat;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -162,6 +163,10 @@ public class Report {
     static ReportConfiguration createConfiguration(String baseDirectory, CommandLine cl) throws IOException {
         final ReportConfiguration configuration = new ReportConfiguration();
 
+        if (cl.hasOption('o')) {
+            configuration.setOut(new File(cl.getOptionValue('o')));
+        }
+
         if (cl.hasOption('a') || cl.hasOption('A')) {
             configuration.setAddLicenseHeaders(cl.hasOption('f') ? AddLicenseHeaders.FORCED : AddLicenseHeaders.TRUE);
             configuration.setCopyrightMessage(cl.getOptionValue("c"));
@@ -261,6 +266,9 @@ public class Report {
         Option help = new Option(HELP, "help", false, "Print help for the RAT command line interface and exit");
         opts.addOption(help);
 
+        Option out = new Option("o", "out", true, "Define the output file where to write report (default is System.out)");
+        opts.addOption(out);
+
         String defaultHandlingText = " By default all approved default licenses are used";
         Option noDefaults = new Option(null, NO_DEFAULTS, false, "Ignore default configuration." + defaultHandlingText);
         opts.addOption(noDefaults);
@@ -346,29 +354,20 @@ public class Report {
      * @return the IReportale instance containing the files.
      */
     private static IReportable getDirectory(String baseDirectory, ReportConfiguration config) {
-        try (PrintStream out = new PrintStream(config.getOutput().get())) {
-            File base = new File(baseDirectory);
-            if (!base.exists()) {
-                out.print("ERROR: ");
-                out.print(baseDirectory);
-                out.print(" does not exist.\n");
-                return null;
-            }
+        File base = new File(baseDirectory);
 
-            if (base.isDirectory()) {
-                return new DirectoryWalker(base, config.getInputFileFilter());
-            }
+        if (!base.exists()) {
+            throw new ConfigurationException(baseDirectory + " doesn't exist");
+        }
 
-            try {
-                return new ArchiveWalker(base, config.getInputFileFilter());
-            } catch (IOException ex) {
-                out.print("ERROR: ");
-                out.print(baseDirectory);
-                out.print(" is not valid gzip data.\n");
-                return null;
-            }
+        if (base.isDirectory()) {
+            return new DirectoryWalker(base, config.getInputFileFilter());
+        }
+
+        try {
+            return new ArchiveWalker(base, config.getInputFileFilter());
         } catch (IOException e) {
-            throw new ConfigurationException("Error opening output", e);
+            throw new ConfigurationException(baseDirectory + " is not a valid archive", e);
         }
     }
 
