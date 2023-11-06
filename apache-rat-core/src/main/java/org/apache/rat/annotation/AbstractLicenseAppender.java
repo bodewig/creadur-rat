@@ -71,6 +71,7 @@ public abstract class AbstractLicenseAppender {
     private static final int TYPE_PM = 27;
     private static final int TYPE_MD = 28;
     private static final int TYPE_YAML = 29;
+    private static final int TYPE_CQL = 31;
     
     
 
@@ -82,7 +83,7 @@ public abstract class AbstractLicenseAppender {
     private static final int[] FAMILY_C = new int[]{
             TYPE_JAVA, TYPE_JAVASCRIPT, TYPE_C, TYPE_H, TYPE_SCALA,
             TYPE_CSS, TYPE_CPP, TYPE_CSHARP, TYPE_PHP, TYPE_GROOVY,
-            TYPE_BEANSHELL, TYPE_GO,
+            TYPE_BEANSHELL, TYPE_GO, TYPE_CQL,
     };
     private static final int[] FAMILY_SGML = new int[]{
             TYPE_XML, TYPE_HTML, TYPE_JSP, TYPE_FML, TYPE_MD,
@@ -147,7 +148,9 @@ public abstract class AbstractLicenseAppender {
         EXT2TYPE.put("cc", TYPE_CPP);
         EXT2TYPE.put("cmd", TYPE_BAT);
         EXT2TYPE.put("config", TYPE_XML);
+        EXT2TYPE.put("conf", TYPE_YAML);
         EXT2TYPE.put("cpp", TYPE_CPP);
+        EXT2TYPE.put("cql",  TYPE_CQL);
         EXT2TYPE.put("cs", TYPE_CSHARP);
         EXT2TYPE.put("csdproj", TYPE_XML);
         EXT2TYPE.put("csproj", TYPE_XML);

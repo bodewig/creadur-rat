@@ -346,13 +346,14 @@ public class Report {
      * @return the IReportale instance containing the files.
      */
     private static IReportable getDirectory(String baseDirectory, ReportConfiguration config) {
-        try (PrintStream out = new PrintStream(config.getOutput().get())) {
+        //try (PrintStream out = new PrintStream(config.getOutput().get())) {
             File base = new File(baseDirectory);
             if (!base.exists()) {
-                out.print("ERROR: ");
-                out.print(baseDirectory);
-                out.print(" does not exist.\n");
-                return null;
+//                out.print("ERROR: ");
+//                out.print(baseDirectory);
+//                out.print(" does not exist.\n");
+//                return null;
+                throw new ConfigurationException(baseDirectory+" does not exist");
             }
 
             if (base.isDirectory()) {
@@ -362,14 +363,15 @@ public class Report {
             try {
                 return new ArchiveWalker(base, config.getInputFileFilter());
             } catch (IOException ex) {
-                out.print("ERROR: ");
-                out.print(baseDirectory);
-                out.print(" is not valid gzip data.\n");
-                return null;
+//                out.print("ERROR: ");
+//                out.print(baseDirectory);
+//                out.print(" is not valid gzip data.\n");
+//                return null;
+                throw new ConfigurationException(baseDirectory+" is not valid gzip data.");
             }
-        } catch (IOException e) {
-            throw new ConfigurationException("Error opening output", e);
-        }
+//        } catch (IOException e) {
+//            throw new ConfigurationException("Error opening output", e);
+//        }
     }
 
     /**
