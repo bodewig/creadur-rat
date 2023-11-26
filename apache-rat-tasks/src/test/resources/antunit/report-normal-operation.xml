@@ -55,10 +55,12 @@ SPDX-License-Identifier: Apache-2.0
 		loaderref="testloader" />
 
 	<typedef name="matcher" classname="org.example.Matcher"
-		classpath="${test.classpath}" />
+		classpath="${test.classpath}"
+		loaderref="testloader" />
 
 	<typedef name="matcherBuilder" classname="org.example.MatcherBuilder"
-		classpath="${test.classpath}" />
+		classpath="${test.classpath}"
+		loaderref="testloader" />
 
 	<target name="setUp">
 		<pathconvert dirsep="/" property="file.name">
@@ -99,7 +101,7 @@ SPDX-License-Identifier: Apache-2.0
 			<rat:report>
 				<file file="${ant.file}" />
 			</rat:report>
-<!-- FIXME			<au:assertLogContains text="${expectedOutput}" />-->
+			<au:assertLogContains text="${expectedOutput}" />
 		</target>
 
 		<target name="testWithReportSentToFile" depends="fileReportTest">
@@ -138,7 +140,7 @@ SPDX-License-Identifier: Apache-2.0
 			</rat:license>
 		</rat:report>
 		<au:assertLogDoesntContain text="${expectedOutput}" />
-<!--FIXME		<au:assertLogContains text="!????? ${file.name}" />-->
+		<au:assertLogContains text="!????? ${file.name}" />
 	</target>
 
 		<target name="testWithALUnknownSentToFile" depends="fileReportTest">
@@ -160,33 +162,33 @@ SPDX-License-Identifier: Apache-2.0
 			<assertReportContains text="!????? ${file.name}" />
 		</target>
 
-<!-- FIXME		<target name="testCustomMatcher">-->
-<!-- 			<rat:report useDefaultLicenses="false">-->
-<!--				<file file="${ant.file}" />-->
-<!--				<rat:license-->
-<!--					id="EXMPL"-->
-<!--					name="Yet Another Software License (EXAMPLE) 1.0"-->
-<!--					notes="Interesting License">-->
-<!--					<matcher />-->
-<!--				</rat:license>-->
-<!--			</rat:report>-->
-<!--			<au:assertLogDoesntContain text="${expectedOutput}" />-->
-<!--			<au:assertLogContains text=" EXMPL ${file.name}" />-->
-<!--		</target>-->
+		<target name="testCustomMatcher">
+ 			<rat:report useDefaultLicenses="false">
+				<file file="${ant.file}" />
+				<rat:license
+					id="EXMPL"
+					name="Yet Another Software License (EXAMPLE) 1.0"
+					notes="Interesting License">
+					<matcher />
+				</rat:license>
+			</rat:report>
+			<au:assertLogDoesntContain text="${expectedOutput}" />
+			<au:assertLogContains text=" EXMPL ${file.name}" />
+		</target>
 
-<!-- FIXME		<target name="testCustomMatcherBuilder">-->
-<!--			<rat:report useDefaultLicenses="false">-->
-<!--				<file file="${ant.file}" />-->
-<!--				<rat:license-->
-<!--					id="EXMPL"-->
-<!--					name="Yet Another Software License (EXAMPLE) 1.0"-->
-<!--					notes="Interesting License">-->
-<!--					<matcherBuilder />-->
-<!--				</rat:license>-->
-<!--			</rat:report>-->
-<!--			<au:assertLogDoesntContain text="${expectedOutput}" />-->
-<!--			<au:assertLogContains text=" EXMPL ${file.name}" />-->
-<!--		</target>-->
+		<target name="testCustomMatcherBuilder">
+			<rat:report useDefaultLicenses="false">
+				<file file="${ant.file}" />
+				<rat:license
+					id="EXMPL"
+					name="Yet Another Software License (EXAMPLE) 1.0"
+					notes="Interesting License">
+					<matcherBuilder />
+				</rat:license>
+			</rat:report>
+			<au:assertLogDoesntContain text="${expectedOutput}" />
+			<au:assertLogContains text=" EXMPL ${file.name}" />
+		</target>
 
 		<target name="testInlineCustomMatcher"
 	depends="prepareCustomMatcher">
@@ -200,7 +202,7 @@ SPDX-License-Identifier: Apache-2.0
 				</rat:license>
 			</rat:report>
 			<au:assertLogDoesntContain text="${expectedOutput}" />
-<!-- FIXME			<au:assertLogContains text=" EXMPL ${file.name}" />-->
+			<au:assertLogContains text=" EXMPL ${file.name}" />
 		</target>
 
 <!-- FIXME		<target name="testCustomLicenseSentToFile"-->
